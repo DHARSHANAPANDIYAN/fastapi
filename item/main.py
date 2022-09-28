@@ -82,9 +82,15 @@ def get_cpmrp(cpmrp_item:int, db:Session = Depends(get_db)):
     return cpmrp
 
 
-# @app.get('/join',)
-# def joins(Session = Depends(get_db)):
-#     q = Session.query(models.Item).join(models.CPMRP, models.Item.id==models.CPMRP.cpmrp_item)
-#     return q
+@app.get('/outer_join')
+def joins( db:Session = Depends(get_db)):
+    q = db.query(models.Item, models.CPMRP).outerjoin(models.CPMRP).filter(models.Item.id==models.CPMRP.cpmrp_item).all()
+    return q
+
+    
+@app.get('/join')
+def joins( db:Session = Depends(get_db)):
+    q = db.query(models.Item, models.CPMRP).join(models.CPMRP).filter(models.Item.id==models.CPMRP.cpmrp_item).all()
+    return q
 
     
